@@ -51,7 +51,7 @@ data ThreadPool m a b
 sequentialThreadPool :: MonadIO m => ThreadPool m a b
 sequentialThreadPool = ThreadPool runSequentially
 
-parallelThreadPool :: MonadIO m => Int -> m (ThreadPool m a b)
+parallelThreadPool :: (MonadFail m, MonadIO m) => Int -> m (ThreadPool m a b)
 parallelThreadPool n =
     do when (n < 1) $ fail ("invalid number of workers: " ++ show n)
        return (ThreadPool (runParallel n))
@@ -87,7 +87,11 @@ instance Show (WorkResult m b) where
 
 type FromWorker m b = NamedChan (WorkResult m b)
 
+#if !MIN_VERSION_base(4,13,0)
 runParallel :: forall m a b . MonadIO m => Int -> [ThreadPoolEntry m a b] -> m ()
+#else
+runParallel :: forall m a b . (MonadFailm, MonadIO m) => Int -> [ThreadPoolEntry m a b] -> m ()
+#endif
 runParallel _ [] = return ()
 runParallel n entries =
     do when (n < 1) $ fail ("invalid number of workers: " ++ show n)
