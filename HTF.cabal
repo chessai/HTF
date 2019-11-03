@@ -163,7 +163,7 @@ Library
     Test.Framework.Diff
     Test.Framework.Process
   Default-language:  Haskell2010
-  Ghc-Options: -W -fwarn-unused-imports -fwarn-unused-binds -fwarn-unused-matches -fwarn-unused-do-bind -fwarn-wrong-do-bind
+  Ghc-Options: -W -fwarn-unused-imports -fwarn-unused-binds -fwarn-unused-matches -fwarn-unused-do-bind -fwarn-wrong-do-bind -v3
 
 Test-Suite MiscTests
   Main-is:           MiscTest.hs
