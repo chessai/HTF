@@ -1,4 +1,4 @@
-{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE CPP, ScopedTypeVariables #-}
 --
 -- Copyright (c) 2013   Stefan Wehr - http://www.stefanwehr.de
 --
