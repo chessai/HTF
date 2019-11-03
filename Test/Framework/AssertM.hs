@@ -1,3 +1,5 @@
+{-# LANGUAGE CPP #-}
+
 {-|
 
 This module defines the 'AssertM' monad, which allows you either to run assertions
@@ -10,10 +12,11 @@ module Test.Framework.AssertM (
 
 ) where
 
-import Data.Maybe
-import qualified Data.Text as T
 import Control.Applicative (Applicative(..))
 import Control.Monad       (liftM, ap)
+import Data.Maybe
+import qualified Control.Monad.Fail as Fail
+import qualified Data.Text as T
 
 import Test.Framework.TestInterface
 import Test.Framework.Location
@@ -55,6 +58,11 @@ instance Monad AssertBool where
     return = AssertOk
     AssertFailed stack >>= _ = AssertFailed stack
     AssertOk x >>= k = k x
+#if !MIN_VERSION_base(4,13,0)
+    fail msg = Fail.fail
+#endif
+
+instance MonadFail AssertBool where
     fail msg = AssertFailed [AssertStackElem (Just msg) Nothing]
 
 instance AssertM AssertBool where
